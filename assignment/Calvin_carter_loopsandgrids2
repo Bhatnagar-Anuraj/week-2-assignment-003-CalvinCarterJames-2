@@ -1,0 +1,45 @@
+import maya.cmds as cmds
+
+# Clear the scene.
+cmds.file(new=True, force=True)
+
+
+def generate_pattern():   
+    # --- Configuration variables ---
+num_rows = 8        # Number of rows in the pattern.
+num_cols = 8        # Number of columns in the pattern.
+spacing = 8     # Distance between object centers.
+
+# base scale for all objects
+
+width = 2
+height = 2
+depth = 2
+radius = 2
+y_pos = 0
+x_rotation = 46
+
+for row in range (num_rows):
+    for col in range (num_cols):
+    #            Calculate position
+        x_pos = col * spacing
+        z_pos = row * spacing
+        # Spawns spheres in first four rows
+        if (row + col) <= 3:
+            cmds.polySphere(radius=radius)
+            cmds.move (x_pos, y_pos ,z_pos)
+            cmds.rotate (0, 0, 0)
+        # Spawns cylinders in row 5 up
+        elif (row + col) <= 5:
+            cmds.polyCylinder(radius = radius, height = height)
+            cmds.move (x_pos, y_pos, z_pos)
+            cmds.rotate (x_rotation, 0, 0)
+        elif (row + col) <= 8:
+            # spawns cubes in rows 7 up
+            cmds.polyCube(width = width, height= height, depth = depth)
+            cmds.move(x_pos, y_pos, z_pos)
+            cmds.rotate(x_rotation, 0, 0)
+            
+# Frame everything in the viewport.
+cmds.viewFit(allObjects=True)
+print("Pattern generated successfully!")
